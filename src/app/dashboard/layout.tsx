@@ -4,6 +4,7 @@ import Link from "next/link";
 import { UserDropDownMenu } from "@/components/UserDropDownMenu";
 import { authOptions } from "@/lib/utils";
 import { NotificationProvider } from "@/contexts/notificationContext";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 type Props = {
   children: React.ReactNode;
@@ -12,9 +13,7 @@ type Props = {
 export default async function Page(props: Props) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect('/')
-  }
+  if (!session) redirect('/login');
 
   return (
     <>

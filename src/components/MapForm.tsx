@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef } from "react";
+import { ChangeEvent, useRef } from "react";
 import { DatePicker } from "./DatePicker"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { OrderInputs } from "@/lib/Constants";
 import { useCreateOrder, useFetchOrders } from "@/hooks/useOrders";
+import { PlacesAutoCompleteInput } from "./PlacesAutoCompleteInput";
 
 interface mapFormProps {
   fetchOrders: (forceRefresh?: boolean, page?: number) => Promise<void>,
@@ -43,23 +44,18 @@ export default function MapForm({ fetchOrders }: mapFormProps) {
       </div>
 
       <div>
-        <label htmlFor="startAddress">Endereço de partida</label>
-        <Input
+        <PlacesAutoCompleteInput
           name="startAddress"
-          type="text"
-          placeholder="Rua do Limão, 324"
-          onChange={(e) => data.current.initialPoint = e.target.value}
+          label='Endereço de partida'
+          onAddressSelect={ (value:string) => { data.current.initialPoint = value  } } 
         />
       </div>
-
-
+      
       <div>
-        <label htmlFor="endAddress">Endereço de entrega</label>
-        <Input
+      <PlacesAutoCompleteInput
           name="endAddress"
-          type="text"
-          placeholder="Grove Street, 230"
-          onChange={(e) => data.current.endPoint = e.target.value}
+          label='Endereço de entrega'
+          onAddressSelect={ (value:string) => { data.current.endPoint = value  } } 
         />
       </div>
 
