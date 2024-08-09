@@ -15,11 +15,11 @@ export function RouteView({ viewRoute, close }: { viewRoute: IOrder, close: Void
   const url = `${baseUrl}?key=${process.env.NEXT_PUBLIC_GOOGLE_APIKEY}&origin=${encodeURIComponent(initialPoint)}&destination=${encodeURIComponent(endPoint)}`;
 
   return <Dialog open={true} onOpenChange={close}>
-    <DialogContent className="max-w-[720px]">
+    <DialogContent className="max-w-[95vw] md:max-w-[720px]">
       <DialogHeader>
         <DialogTitle>Detalhes da entrega</DialogTitle>
         <DialogDescription>
-          <div className="w-full flex flex-col gap-5 mt-5">
+          <div className="w-full flex flex-col gap-5 mt-5 text-left">
 
             <div className="flex gap-10">
               <span><span className="text-muted-foreground">ID:</span> {id}</span>
@@ -40,7 +40,7 @@ export function RouteView({ viewRoute, close }: { viewRoute: IOrder, close: Void
       </DialogHeader>
       <div>
         <iframe
-          className="w-full min-w-[600px] h-auto aspect-video"
+          className="w-full md:min-w-[600px] h-auto aspect-video"
           src={url}
           loading="lazy"
         ></iframe>

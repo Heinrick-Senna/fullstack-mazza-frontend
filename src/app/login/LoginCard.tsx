@@ -10,7 +10,7 @@ import { NotificationProvider } from "@/contexts/notificationContext";
 type loginState = 'login' | 'signup';
 
 export default function LoginCard() {
-  const [loginState, setLoginState] = useState<loginState>(window.location.pathname == '/login' ? 'login' : 'signup');
+  const [loginState, setLoginState] = useState<loginState>(window?.location?.pathname == '/login' ? 'login' : 'signup');
 
   const toggleState = () => {
     setLoginState(oldState => oldState == 'login' ? 'signup' : 'login');
@@ -18,8 +18,8 @@ export default function LoginCard() {
 
   return (
     <NotificationProvider>
-      <div className="flex items-center justify-center w-full max-w-7xl">
-        <Card className="flex flex-col w-2/5 max-w-2/5 p-5 gap-5 animate-in fade-in">
+      <div className="flex items-center justify-center w-full md:max-w-7xl">
+        <Card className="flex flex-col max-w-[calc(100vw-2.5rem)] md:w-2/5 md:max-w-2/5 p-5 gap-5 animate-in fade-in">
           <h2 className="w-full text-center">
             {
               loginState == 'login'

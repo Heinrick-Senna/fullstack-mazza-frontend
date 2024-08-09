@@ -39,24 +39,24 @@ export function TableList({ setViewRoute, fetchOrders, data }: tableListProps) {
         <TableCell className="font-medium">{order.id}</TableCell>
         <TableCell>{order.clientName}</TableCell>
         <TableCell>{order.date}</TableCell>
-        <TableCell>{order.initialPoint}</TableCell>
-        <TableCell>{order.endPoint}</TableCell>
-        <TableCell className="cursor-pointer w-[25px]" align="right" onClick={() => setViewRoute(order)}> <EyeIcon className="mr-2 h-4 w-4" aria-label="Ver" title="Ver" /></TableCell>
-        <TableCell className="cursor-pointer w-[25px]" align="right" onClick={() => handleDelete(order.id)}><TrashIcon className="mr-2 h-4 w-4" aria-label="Deletar" title="Deletar" /></TableCell>
+        <TableCell className="hidden md:table-cell">{order.initialPoint}</TableCell>
+        <TableCell className="hidden md:table-cell">{order.endPoint}</TableCell>
+        <TableCell className="cursor-pointer md:w-[25px]" align="right" onClick={() => setViewRoute(order)}> <EyeIcon className="mr-2 h-4 w-4" aria-label="Ver" title="Ver" /></TableCell>
+        <TableCell className="cursor-pointer md:w-[25px]" align="right" onClick={() => handleDelete(order.id)}><TrashIcon className="mr-2 h-4 w-4" aria-label="Deletar" title="Deletar" /></TableCell>
       </TableRow>
     )
   }
 
   return (
-    <Table>
+    <Table className="md:max-w-auto">
       <TableCaption>Lista de Entregas</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[80px]">ID</TableHead>
+          <TableHead className="md:w-[80px]">ID</TableHead>
           <TableHead>Cliente</TableHead>
-          <TableHead className="w-[120px]">Data</TableHead>
-          <TableHead>Partida</TableHead>
-          <TableHead>Destino</TableHead>
+          <TableHead className="md:w-[120px]">Data</TableHead>
+          <TableHead className="hidden md:table-cell">Partida</TableHead>
+          <TableHead className="hidden md:table-cell">Destino</TableHead>
           <TableHead onClick={() => { fetchOrders() }}><ArrowPathIcon className="mr-2 h-4 w-4" /></TableHead>
         </TableRow>
       </TableHeader>
