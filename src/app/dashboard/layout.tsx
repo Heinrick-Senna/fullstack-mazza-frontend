@@ -4,7 +4,6 @@ import Link from "next/link";
 import { UserDropDownMenu } from "@/components/UserDropDownMenu";
 import { authOptions } from "@/lib/utils";
 import { NotificationProvider } from "@/contexts/notificationContext";
-import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 type Props = {
   children: React.ReactNode;

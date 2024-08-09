@@ -1,6 +1,4 @@
 "use client"
-
-import * as React from "react"
 import {
   Command,
   CommandGroup,
@@ -8,22 +6,36 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { useEffect } from "react";
 
 import usePlacesAutocomplete, { Suggestion } from "use-places-autocomplete";
 
-export function PlacesAutoCompleteInput({ label, name, onAddressSelect }: { label: string, name:string, onAddressSelect: (value: string) => void }) {
+interface IAutocompleteInputProps {
+  label: string,
+  name: string,
+  onAddressSelect: (value: string) => void
+}
+
+export default function PlacesAutoCompleteInput({ label, name, onAddressSelect }: IAutocompleteInputProps) {
   const {
     ready,
     value,
     suggestions: { status, data },
     setValue,
     clearSuggestions,
-  } = usePlacesAutocomplete();
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      language: 'pt-BR',
+      componentRestrictions: { country: "br" },
+      types: ["address"]
+    },
+  });
 
-  const handleInput = (value: string) => {
+  useEffect(() => {
     onAddressSelect(value);
-    setValue(value);
-  };
+  }, [value]);
+
+  if (!ready) return <p>Loading....</p>;
 
   return (
     <>
@@ -31,28 +43,30 @@ export function PlacesAutoCompleteInput({ label, name, onAddressSelect }: { labe
         <label htmlFor={name}>{label}</label>
         <CommandInput
           name={name}
-          onBlur={() => clearSuggestions()}
+          onBlur={() => setTimeout(() => clearSuggestions(), 100)}
           value={value}
-          onChangeCapture={(e) => { handleInput((e.target as HTMLInputElement).value) }}
+          onChangeCapture={(e) => { setValue((e.target as HTMLInputElement).value) }}
           placeholder="Pesquisar Endereço"
         />
         <CommandList>
-          <CommandGroup>
-            {
-              status === "OK" &&
-              data.map(({ place_id, description }: Suggestion) => (
-                <CommandItem
-                  className="cursor-pointer"
-                  key={place_id}
-                  value={description}
-                  onSelect={() => {
-                    handleInput(description);
-                    clearSuggestions();
-                  }}
-                >{description}</CommandItem>
-              ))
-            }
-          </CommandGroup>
+          {
+            status === "OK" && data && data[0].description != value &&
+            <CommandGroup>
+              {
+                data.map(({ place_id, description }: Suggestion) => (
+                  <CommandItem
+                    className="cursor-pointer"
+                    key={place_id}
+                    value={description}
+                    onSelect={() => {
+                      setValue(description)
+                      clearSuggestions();
+                    }}
+                  >{description}</CommandItem>
+                ))
+              }
+            </CommandGroup>
+          }
         </CommandList>
       </Command>
     </>

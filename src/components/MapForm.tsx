@@ -1,21 +1,44 @@
 "use client"
 
-import { ChangeEvent, useRef } from "react";
+import { useRef } from "react";
 import { DatePicker } from "./DatePicker"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
+import PlacesAutoCompleteInput from "./PlacesAutoCompleteInput";
 import { OrderInputs } from "@/lib/Constants";
-import { useCreateOrder, useFetchOrders } from "@/hooks/useOrders";
-import { PlacesAutoCompleteInput } from "./PlacesAutoCompleteInput";
+import { useCreateOrder } from "@/hooks/useOrders";
+import { useNotificationContext } from "@/contexts/notificationContext";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 interface mapFormProps {
   fetchOrders: (forceRefresh?: boolean, page?: number) => Promise<void>,
 }
 
+const libraries: Libraries = ["places"];
+
 export default function MapForm({ fetchOrders }: mapFormProps) {
+  const { isLoaded, loadError } = useLoadScript({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_APIKEY,
+    libraries,
+  });
+
   const { registerNewOrder } = useCreateOrder();
+  const { setNotificationState } = useNotificationContext();
+
+  const callError = (errorDescription:string) => {
+    setNotificationState({
+      error: true,
+      notificationDescription: errorDescription
+    })
+  }
 
   const handleCreateOrder = async () => {
+    if (!data.current.clientName) return callError('O nome do cliente não pode ficar em branco.');
+    if (!data.current.endPoint) return callError('O endereço do cliente não pode ficar em branco.');
+    if (!data.current.initialPoint) return callError('O endereço do remetente não pode ficar em branco.');
+    if (!data.current.date) return callError('Você deve escolher uma data');
+
     await registerNewOrder(data.current);
     setTimeout(() => {
       fetchOrders(true)
@@ -28,6 +51,8 @@ export default function MapForm({ fetchOrders }: mapFormProps) {
     endPoint: '',
     date: ''
   })
+
+  if (!isLoaded) return <p>Loading....</p>
 
   return (
     <>
@@ -47,15 +72,15 @@ export default function MapForm({ fetchOrders }: mapFormProps) {
         <PlacesAutoCompleteInput
           name="startAddress"
           label='Endereço de partida'
-          onAddressSelect={ (value:string) => { data.current.initialPoint = value  } } 
+          onAddressSelect={(value: string) => { data.current.initialPoint = value }}
         />
       </div>
-      
+
       <div>
-      <PlacesAutoCompleteInput
+        <PlacesAutoCompleteInput
           name="endAddress"
           label='Endereço de entrega'
-          onAddressSelect={ (value:string) => { data.current.endPoint = value  } } 
+          onAddressSelect={(value: string) => { data.current.endPoint = value }}
         />
       </div>
 
