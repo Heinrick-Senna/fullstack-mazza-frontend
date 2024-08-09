@@ -57,7 +57,7 @@ export function TableList({ setViewRoute, fetchOrders, data }: tableListProps) {
           <TableHead className="md:w-[120px]">Data</TableHead>
           <TableHead className="hidden md:table-cell">Partida</TableHead>
           <TableHead className="hidden md:table-cell">Destino</TableHead>
-          <TableHead onClick={() => { fetchOrders() }}><ArrowPathIcon className="mr-2 h-4 w-4" /></TableHead>
+          <TableHead onClick={() => { fetchOrders(true) }}><ArrowPathIcon className="mr-2 h-4 w-4" /></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
